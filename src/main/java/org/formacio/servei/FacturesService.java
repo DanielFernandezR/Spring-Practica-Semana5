@@ -27,17 +27,24 @@ public class FacturesService {
 	 * Per implementar aquest metode necessitareu una referencia (dependencia) a FacturesRepositori
 	 */
 	public Factura afegirProducte (long idFactura, String producte, int totalProducte) {
+		
 		Optional<Factura> factura = repositorioFacturas.findById(idFactura);
-		LiniaFactura nuevaLinea = new LiniaFactura();
 		
-		nuevaLinea.setProducte(producte);
-		nuevaLinea.setTotal(totalProducte);
-		factura.get().getLinies().add(nuevaLinea);
-		repositorioFacturas.save(factura.get());
-		
-		if (factura.get().getLinies().size() >= 4) {
-			fidelizacion.notificaRegal(factura.get().getClient().getEmail());
+		if (factura.isPresent()) {
+			LiniaFactura nuevaLinea = new LiniaFactura();
+			nuevaLinea.setProducte(producte);
+			nuevaLinea.setTotal(totalProducte);
+			factura.get().getLinies().add(nuevaLinea);
+			repositorioFacturas.save(factura.get());
+			
+			notificarRegalo(factura.get());
 		}
 		return factura.get();
+	}
+	
+	private void notificarRegalo(Factura factura) {
+		if (factura.getLinies().size() >= 4) {
+			fidelizacion.notificaRegal(factura.getClient().getEmail());
+		}
 	}
 }
