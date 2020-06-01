@@ -108,8 +108,7 @@ public class JpaBasicApplicationTests {
      @Test
      public void test_query_generada() {
     	      // canvia el null per una cridada a repositori.<metode_creat>("joan");
-    	     List<Factura> facturesJoan = null; 
-    	     
+    	     List<Factura> facturesJoan = repositori.findByClientNom("joan"); 
     	     Assert.assertNotNull(facturesJoan);
     	     Assert.assertEquals(2, facturesJoan.size());
     	     Assert.assertEquals("joan", facturesJoan.get(0).getClient().getNom());
